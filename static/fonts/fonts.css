@@ -1,0 +1,26 @@
+@font-face {
+  src: url('./JetBrainsMono/woff/JetBrainsMono-Regular.woff') format('woff'),
+    url('./JetBrainsMono/woff2/JetBrainsMono-Regular.woff2') format('woff2'),
+    url('./JetBrainsMono/ttf/JetBrainsMono-Regular.ttf') format('truetype'),
+    url('./JetBrainsMono/eot/JetBrainsMono-Regular.eot') format('eot');
+  font-family: 'Jet Brains';
+  font-weight: normal;
+}
+
+@font-face {
+  src: url('./JetBrainsMono/woff/JetBrainsMono-Medium.woff') format('woff'),
+    url('./JetBrainsMono/woff2/JetBrainsMono-Medium.woff2') format('woff2'),
+    url('./JetBrainsMono/ttf/JetBrainsMono-Medium.ttf') format('truetype'),
+    url('./JetBrainsMono/eot/JetBrainsMono-Medium.eot') format('eot');
+  font-family: 'Jet Brains';
+  font-weight: medium;
+}
+
+@font-face {
+  src: url('./JetBrainsMono/woff/JetBrainsMono-Bold.woff') format('woff'),
+    url('./JetBrainsMono/woff2/JetBrainsMono-Bold.woff2') format('woff2'),
+    url('./JetBrainsMono/ttf/JetBrainsMono-Bold.ttf') format('truetype'),
+    url('./JetBrainsMono/eot/JetBrainsMono-Bold.eot') format('eot');
+  font-family: 'Jet Brains';
+  font-weight: bold;
+}
