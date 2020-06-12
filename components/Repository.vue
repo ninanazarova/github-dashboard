@@ -2,7 +2,7 @@
   <panel class="repo-container">
     <h3 class="repo-container__name">Repository Name</h3>
     <star-counter />
-    <p class="repo-container__commit-date">Latest commit: 20.02.20</p>
+    <commit-date />
     <a class="github-link" href="https://github.com">GitHub</a>
   </panel>
 </template>
@@ -10,10 +10,12 @@
 <script>
 import Panel from '@/components/Panel';
 import StarCounter from '@/components/ui/StarCounter';
+import CommitDate from '@/components/ui/CommitDate';
 export default {
   components: {
     panel: Panel,
     'star-counter': StarCounter,
+    'commit-date': CommitDate,
   },
 };
 </script>

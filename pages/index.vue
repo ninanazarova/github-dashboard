@@ -1,11 +1,11 @@
 <template>
-  <main class="container">
-    <panel class="container__search">
+  <main class="index">
+    <panel class="index__search">
       <search />
-      <nxt-button :theme="'light'" :block="'container'">search</nxt-button>
+      <nxt-button :theme="'light'" :block="'index'">search</nxt-button>
     </panel>
-    <h2 class="container__title">Most popular repositories:</h2>
-    <ul class="container__repository-list repository-list">
+    <h2 class="index__title">Most popular repositories:</h2>
+    <ul class="index__repository-list repository-list">
       <li class="repository-list__item">
         <repository />
       </li>
@@ -41,22 +41,22 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.index {
   max-width: 1184px;
-  margin: 80px auto 0;
+  margin: 80px auto;
 }
 
-.container__search {
+.index__search {
   display: flex;
   justify-content: center;
 }
 
-.container__title {
+.index__title {
   text-align: center;
   margin: 40px 0;
 }
 
-.container__repository-list {
+.index__repository-list {
   display: flex;
   flex-direction: column;
   align-items: center;
