@@ -1,6 +1,8 @@
 <template>
   <header class="header">
-    <nuxt-link to="/" v-if="$route.path !== '/'" class="header__logo">github-dashboard</nuxt-link>
+    <nuxt-link to="/" v-if="$route.path !== '/'" class="header__logo"
+      >github-dashboard</nuxt-link
+    >
     <h1 v-else class="header__logo">github-dashboard</h1>
   </header>
 </template>
