@@ -4,7 +4,7 @@
       <search />
       <nxt-button :theme="'light'" :block="'index'">search</nxt-button>
     </panel>
-    <h2 class="index__title">Most popular repositories:</h2>
+    <h2 class="index__title">Most popular repositories</h2>
     <ul class="index__repository-list repository-list">
       <li class="repository-list__item">
         <repository />
