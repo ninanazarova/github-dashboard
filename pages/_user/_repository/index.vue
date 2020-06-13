@@ -14,8 +14,8 @@
           <h2 class="repository__description-title title">Description</h2>
           <p class="repository__description">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
             aliquip ex ea commodo consequat. Duis aute irure dolor in
             reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
@@ -32,7 +32,10 @@
           <h2 class="repository__contributors-title title">Contributors</h2>
           <ul class="repository__contributors">
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -40,7 +43,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -48,7 +54,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -56,7 +65,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -64,7 +76,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -72,7 +87,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -80,7 +98,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -88,7 +109,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -96,7 +120,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
@@ -104,7 +131,10 @@
               </a>
             </li>
             <li class="repository__contributor">
-              <a class="repository__contributor-link" href="https://github.com/">
+              <a
+                class="repository__contributor-link"
+                href="https://github.com/"
+              >
                 <img
                   class="repository__contributor-photo"
                   src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
