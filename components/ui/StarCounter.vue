@@ -1,13 +1,13 @@
 <template>
   <div class="star-container">
-    <img src="../../static/icons/star (1).svg" class="star-container__star" />
-    <span class="star-container__counter">100500</span>
+    <span class="star-container__counter">{{ starsCount }}</span>
   </div>
 </template>
 
 <script>
 import Panel from '@/components/Panel';
 export default {
+  props: ['starsCount'],
   components: {
     panel: Panel,
   },
@@ -21,11 +21,21 @@ export default {
 }
 
 .star-container__star {
-  width: 20px;
+  width: 22px;
+  margin-right: 8px;
   height: auto;
 }
 
 .star-container__counter {
-  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.star-container__counter::before {
+  content: url(../../static/icons/star.svg);
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
 }
 </style>

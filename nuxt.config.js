@@ -26,7 +26,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: [{ lang: 'css', src: 'assets/style/main.css' }],
   /*
    ** Plugins to load before mounting the App
    */
@@ -56,5 +56,10 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {},
+  },
+
+  pageTransition: {
+    name: 'fade',
+    mode: 'out-in',
   },
 };

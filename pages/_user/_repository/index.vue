@@ -1,7 +1,7 @@
 <template>
   <main class="repository">
     <panel class="repository__panel">
-      <h1 class="repository__name">Repository Name</h1>
+      <h1 class="repository__name">{{ repository.full_name }}</h1>
 
       <ul class="repository__lang-list lang-list">
         <li class="lang-list__item">Vue</li>
@@ -13,19 +13,15 @@
         <div>
           <h2 class="repository__description-title title">Description</h2>
           <p class="repository__description">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            {{ repository.description }}
           </p>
         </div>
 
         <div class="repository__data-container">
           <star-counter class="repository__star-counter" />
-          <commit-date class="repository__commit-date" />
+          <commit-date class="repository__commit-date">{{
+            repository.pushed_at
+          }}</commit-date>
         </div>
 
         <div>
@@ -149,10 +145,14 @@
         <h2 class="repository__owner-title title">Owner</h2>
         <img
           class="repository__owner-photo"
-          src="https://avatars2.githubusercontent.com/u/64554655?s=400&u=f389bb072d735467e297cbca33dcc0f91c380059&v=4"
+          :src="repository.owner.avatar_url"
         />
-        <p class="repository__owner-name">Nina Nazarova</p>
-        <a class="repository__owner-link" href="https://github.com">GitHub</a>
+        <p class="repository__owner-name">
+          {{ repository.owner.login }}
+        </p>
+        <a class="repository__owner-link" :href="repository.owner.html_url"
+          >GitHub</a
+        >
       </div>
     </panel>
   </main>
@@ -167,6 +167,23 @@ export default {
     panel: Panel,
     'star-counter': StarCounter,
     'commit-date': CommitDate,
+  },
+
+  computed: {
+    repository() {
+      console.log('jopa', this.$store.getters['repositories/getRepository']);
+      return this.$store.getters['repositories/getRepository'];
+    },
+  },
+
+  async fetch({ store, route, error }) {
+    await store
+      .dispatch('repositories/fetchRepository', {
+        fullName: route.path,
+      })
+      .catch(e => {
+        error({ statusCode: 404, message: 'Post not found' });
+      });
   },
 };
 </script>
