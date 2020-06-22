@@ -171,7 +171,6 @@ export default {
 
   computed: {
     repository() {
-      console.log('jopa', this.$store.getters['repositories/getRepository']);
       return this.$store.getters['repositories/getRepository'];
     },
   },

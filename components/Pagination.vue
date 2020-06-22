@@ -72,10 +72,6 @@ export default {
       return 20;
     },
 
-    // repositoriesPerPage() {
-    //   return 5;
-    // },
-
     btnsQuantity() {
       if (process.browser) {
         if (window.innerWidth <= 600) {
@@ -127,14 +123,11 @@ export default {
       });
     },
     nextPageGroup() {
-      this.startIndex = Math.min(
-        this.startIndex + this.btnsQuantity,
-        this.pagesCount - this.btnsQuantity + 1
-      );
+      this.startIndex = this.startIndex + this.btnsQuantity;
     },
     //получить предыдущую пачку кнопок навигации
     previousPageGroup() {
-      this.startIndex = Math.max(this.startIndex - this.btnsQuantity, 1);
+      this.startIndex = this.startIndex - this.btnsQuantity;
     },
     //уйти на первую страницу
     setFirstPageGroup() {
@@ -143,7 +136,7 @@ export default {
     },
     //уйти на последнюю страницу
     setLastPageGroup() {
-      this.startIndex = Math.max(this.pagesCount - this.btnsQuantity + 1, 1);
+      this.startIndex = this.pagesCount - this.btnsQuantity + 1;
       this.changeCurrentPage(this.pagesCount);
     },
   },

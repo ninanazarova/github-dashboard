@@ -8,6 +8,17 @@ export const state = () => ({
 export const mutations = {
   setState: (state, { name, value }) => {
     state[name] = value;
+
+    state.repositories.items.forEach(repo => {
+      const re = /-/g;
+      repo.pushed_at = repo.pushed_at.slice(0, 10).replace(re, '.');
+
+      let count =
+        (Math.floor(repo.stargazers_count / 1000) * 1000) / 1000 + 'K';
+      repo.stargazers_count = count;
+      console.log(repo);
+      // repo.full_name = re
+    });
   },
 
   setRepository: (state, { repository }) => {
@@ -48,7 +59,6 @@ export const getters = {
   },
 
   getRepository(state) {
-    console.log(state.repository);
     return state.repository;
   },
 };

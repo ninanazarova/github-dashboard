@@ -1,5 +1,8 @@
 <template>
-  <button :class="['button', `${block}__button`, `button_theme_${theme}`]">
+  <button
+    :class="['button', `${block}__button`, `button_theme_${theme}`]"
+    @click="$emit('btnClick')"
+  >
     <slot>some button</slot>
   </button>
 </template>

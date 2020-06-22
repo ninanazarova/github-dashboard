@@ -13,14 +13,14 @@ export default {
 
 <style scoped>
 .commit-date {
-  font-size: 12px;
-  align-self: center;
-  color: #47494e;
+  /* font-size: 12px;
+  /* font-weight: bold;
+
+  color: #47494e; */
 }
 
 .commit-date__date {
-  font-size: 12px;
-  font-weight: bold;
-  color: black;
+  /* font-size: 12px;
+  font-weight: bold; */
 }
 </style>

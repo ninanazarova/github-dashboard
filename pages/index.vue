@@ -2,17 +2,20 @@
   <main class="index">
     <panel class="index__search">
       <search />
-      <nxt-button :theme="'light'" :block="'index'">search</nxt-button>
+      <nxt-button @btnClick="alert('yo')" :theme="'light'" :block="'index'"
+        >search</nxt-button
+      >
     </panel>
 
     <h2 class="index__title">Most popular repositories</h2>
     <ul class="index__repository-list repository-list">
       <li
-        v-for="repository in repositories.items"
+        v-for="repository in repositories"
         :key="repository.id"
         class="repository-list__item"
       >
         <repository
+          :repositoryTitle="repository.owner.login + ' / ' + repository.name"
           :repositoryFullName="repository.full_name"
           :githubLink="repository.html_url"
           :starsCount="repository.stargazers_count"
@@ -42,7 +45,10 @@ export default {
 
   computed: {
     repositories() {
-      return this.$store.getters['repositories/getRepositories'];
+      let repositories = this.$store.getters['repositories/getRepositories']
+        .items;
+
+      return repositories;
     },
   },
   created() {

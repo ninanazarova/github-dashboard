@@ -17,7 +17,7 @@ export default {
 <style scoped>
 .star-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .star-container__star {
@@ -27,15 +27,13 @@ export default {
 }
 
 .star-container__counter {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
+  font-size: 20px;
 }
 
 .star-container__counter::before {
   content: url(../../static/icons/star.svg);
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
 }
 </style>
