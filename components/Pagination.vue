@@ -7,7 +7,8 @@
           size="content"
           @click.native="setFirstPageGroup"
           :disabled="firstDisabled"
-        >First</pagination-btn>
+          >First</pagination-btn
+        >
       </li>
       <li class="pagination__item">
         <pagination-btn
@@ -25,14 +26,19 @@
           <pagination-btn
             :active="index === currentPage"
             @click.native="changeCurrentPage(index)"
-          >{{ index }}</pagination-btn>
+            >{{ index }}</pagination-btn
+          >
         </nuxt-link>
       </li>
     </ul>
 
     <ul class="pagination__list">
       <li class="pagination__item">
-        <pagination-btn theme="transparent" direction="right" @click.native="nextPageGroup"></pagination-btn>
+        <pagination-btn
+          theme="transparent"
+          direction="right"
+          @click.native="nextPageGroup"
+        ></pagination-btn>
       </li>
       <li class="pagination__item">
         <pagination-btn
@@ -40,7 +46,8 @@
           size="content"
           @click.native="setLastPageGroup"
           :disabled="finalDisabled"
-        >Last</pagination-btn>
+          >Last</pagination-btn
+        >
       </li>
     </ul>
   </div>
