@@ -1,8 +1,10 @@
 <template>
   <header class="header">
-    <nuxt-link to="/" v-if="$route.path !== '/'" class="header__logo"
-      >github-dashboard</nuxt-link
-    >
+    <nuxt-link
+      to="/"
+      v-if="$route.path !== '/'"
+      class="header__logo header__logo_link"
+    >github-dashboard</nuxt-link>
     <h1 v-else class="header__logo">github-dashboard</h1>
   </header>
 </template>
@@ -21,5 +23,8 @@ export default {};
   font-weight: 800;
   color: black;
   text-decoration: none;
+}
+.header__logo_link:hover {
+  text-decoration: underline;
 }
 </style>

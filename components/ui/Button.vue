@@ -1,8 +1,5 @@
 <template>
-  <button
-    :class="['button', `${block}__button`, `button_theme_${theme}`]"
-    @click="$emit('btnClick')"
-  >
+  <button :class="['button', `${block}__button`, `button_theme_${theme}`]">
     <slot>some button</slot>
   </button>
 </template>
@@ -20,6 +17,7 @@ export default {
   padding: 12px;
   box-sizing: border-box;
   min-width: 10%;
+  outline: none;
 }
 
 .container__button {

@@ -1,16 +1,29 @@
 <template>
   <main class="index">
-    <panel class="index__search">
-      <search />
-      <nxt-button @btnClick="alert('yo')" :theme="'light'" :block="'index'"
-        >search</nxt-button
-      >
-    </panel>
+    <form class="index__form" @submit.prevent="searchRepositories">
+      <nxt-input
+        :placeholder="'search repo'"
+        :type="'text'"
+        :name="'search'"
+        :required="'required'"
+        v-model="search"
+      />
+      <nxt-button :theme="'light'" :block="'index'">search</nxt-button>
+    </form>
 
-    <h2 class="index__title">Most popular repositories</h2>
+    <h2
+      class="index__title"
+      v-if="$route.query.search && repositories.total_count !== 0"
+    >Search results by {{ $route.query.search }}</h2>
+    <h2
+      class="index__title"
+      v-if="$route.query.search && repositories.total_count == 0"
+    >Search results by {{ $route.query.search }} not found</h2>
+    <h2 class="index__title" v-if="!$route.query.search">Most popular repositories</h2>
+
     <ul class="index__repository-list repository-list">
       <li
-        v-for="repository in repositories"
+        v-for="repository in repositories.items"
         :key="repository.id"
         class="repository-list__item"
       >
@@ -24,7 +37,7 @@
       </li>
     </ul>
 
-    <pagination />
+    <pagination v-if="!$route.query.search && repositories.total_count !== 0" />
   </main>
 </template>
 
@@ -34,9 +47,10 @@ import Button from '@/components/ui/Button';
 import Panel from '@/components/Panel';
 import Repository from '@/components/Repository';
 import Pagination from '@/components/Pagination';
+
 export default {
   components: {
-    search: Input,
+    'nxt-input': Input,
     'nxt-button': Button,
     panel: Panel,
     repository: Repository,
@@ -45,30 +59,47 @@ export default {
 
   computed: {
     repositories() {
-      let repositories = this.$store.getters['repositories/getRepositories']
-        .items;
-
+      let repositories = this.$store.getters['repositories/getRepositories'];
       return repositories;
     },
   },
+
+  data() {
+    return {
+      search: this.$route.query.search,
+    };
+  },
+
   created() {
     if (!this.$route.query.p) {
       this.$route.query.p = 1;
     }
     this.$store.dispatch('repositories/fetchRepositories', {
       page: this.$route.query.p,
+      search: this.$route.query.search,
     });
+  },
+
+  methods: {
+    searchRepositories() {
+      this.$router.push({ query: { search: this.search } });
+      this.$route.query.p = 1;
+      this.$store.dispatch('repositories/fetchRepositories', {
+        search: this.search,
+        page: this.$route.query.p,
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
 .index {
-  max-width: 1184px;
+  max-width: 984px;
   margin: 80px auto;
 }
 
-.index__search {
+.index__form {
   display: flex;
   justify-content: center;
 }
@@ -95,7 +126,8 @@ export default {
 
 .repository-list__item {
   width: 100%;
-  margin-bottom: 16px;
+  min-height: 130px;
+  margin-bottom: 24px;
 }
 
 .repository-list__item:last-child {

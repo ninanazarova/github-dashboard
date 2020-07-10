@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { formatTimeString, formatStarCount } from '@/store/utils';
 
 export const state = () => ({
   repositories: [],
   repository: {},
+  query: '',
 });
 
 export const mutations = {
@@ -10,28 +12,31 @@ export const mutations = {
     state[name] = value;
 
     state.repositories.items.forEach(repo => {
-      const re = /-/g;
-      repo.pushed_at = repo.pushed_at.slice(0, 10).replace(re, '.');
-
-      let count =
-        (Math.floor(repo.stargazers_count / 1000) * 1000) / 1000 + 'K';
-      repo.stargazers_count = count;
-      console.log(repo);
-      // repo.full_name = re
+      repo.pushed_at = formatTimeString(repo.pushed_at);
+      repo.stargazers_count = formatStarCount(repo.stargazers_count);
     });
   },
 
   setRepository: (state, { repository }) => {
     state.repository = repository;
+
+    state.repository.pushed_at = formatTimeString(state.repository.pushed_at);
+    state.repository.stargazers_count = formatStarCount(
+      state.repository.stargazers_count
+    );
   },
 };
 
 export const actions = {
-  fetchRepositories(state, { page }) {
+  fetchRepositories(state, { page, search }) {
+    let url = '';
+    if (search) {
+      url = `https://api.github.com/search/repositories?q=stars:>0&sort=stars&q=${search}&type=Repositories&page=${page}&per_page=4`;
+    } else {
+      url = `https://api.github.com/search/repositories?q=stars:>0&sort=stars&type=Repositories&page=${page}&per_page=4`;
+    }
     return axios
-      .get(
-        `https://api.github.com/search/repositories?q=stars:>0&sort=stars&type=Repositories&page=${page}&per_page=4`
-      )
+      .get(url)
       .then(res => {
         return state.commit('setState', {
           name: 'repositories',

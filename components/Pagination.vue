@@ -7,38 +7,32 @@
           size="content"
           @click.native="setFirstPageGroup"
           :disabled="firstDisabled"
-          >First
-        </pagination-btn>
+        >First</pagination-btn>
       </li>
       <li class="pagination__item">
         <pagination-btn
           theme="transparent"
           direction="left"
           @click.native="previousPageGroup"
+          :disabled="firstDisabled"
         ></pagination-btn>
       </li>
     </ul>
 
     <ul class="pagination__list">
       <li class="pagination__item" v-for="index in pages" :key="index">
-        <nuxt-link :to="{ name: '', query: { p: index } }">
+        <nuxt-link :to="{ query: { search: $route.query.search, p: index } }">
           <pagination-btn
             :active="index === currentPage"
             @click.native="changeCurrentPage(index)"
-          >
-            {{ index }}
-          </pagination-btn>
+          >{{ index }}</pagination-btn>
         </nuxt-link>
       </li>
     </ul>
 
     <ul class="pagination__list">
       <li class="pagination__item">
-        <pagination-btn
-          theme="transparent"
-          direction="right"
-          @click.native="nextPageGroup"
-        ></pagination-btn>
+        <pagination-btn theme="transparent" direction="right" @click.native="nextPageGroup"></pagination-btn>
       </li>
       <li class="pagination__item">
         <pagination-btn
@@ -46,8 +40,7 @@
           size="content"
           @click.native="setLastPageGroup"
           :disabled="finalDisabled"
-          >Last
-        </pagination-btn>
+        >Last</pagination-btn>
       </li>
     </ul>
   </div>
@@ -59,6 +52,8 @@ export default {
   components: {
     'pagination-btn': PaginationBtn,
   },
+
+  props: ['query'],
 
   data() {
     return {
@@ -86,15 +81,17 @@ export default {
     },
 
     finalIndex() {
-      return this.startIndex + this.btnsQuantity - 1;
+      const fidx = this.startIndex + this.btnsQuantity - 1;
+      return fidx;
     },
 
     pages() {
       const arrToReturn = [];
+      console.log('jopa', this.finalIndex);
       for (let i = this.startIndex; i <= this.finalIndex; i++) {
         arrToReturn.push(i);
       }
-      console.log(arrToReturn);
+
       return arrToReturn;
     },
     //дизейбл "первая", если мы и так на первой странице пагинации
@@ -110,24 +107,26 @@ export default {
   methods: {
     changeCurrentPage(index) {
       this.currentPage = index;
-      // console.log(this.currentPage);
-      // console.log('index', index);
-      // console.log(this.$route.query.p);
 
-      this.$router.push({ query: { p: index } });
+      this.$router.push({
+        query: { p: index, search: this.$route.query.search },
+      });
       this.$route.query.p = index;
 
       this.$store.dispatch('repositories/fetchRepositories', {
-        // page: this.currentPage,
         page: this.$route.query.p,
+        search: this.$route.query.search,
       });
     },
+
     nextPageGroup() {
       this.startIndex = this.startIndex + this.btnsQuantity;
     },
     //получить предыдущую пачку кнопок навигации
     previousPageGroup() {
-      this.startIndex = this.startIndex - this.btnsQuantity;
+      if (this.startIndex !== 1) {
+        this.startIndex = this.startIndex - this.btnsQuantity;
+      }
     },
     //уйти на первую страницу
     setFirstPageGroup() {

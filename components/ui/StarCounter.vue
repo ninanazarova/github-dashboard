@@ -1,6 +1,6 @@
 <template>
   <div class="star-container">
-    <span class="star-container__counter">{{ starsCount }}</span>
+    {{ starsCount }}
   </div>
 </template>
 
@@ -18,19 +18,14 @@ export default {
 .star-container {
   display: flex;
   align-items: flex-start;
-}
-
-.star-container__star {
-  width: 22px;
-  margin-right: 8px;
-  height: auto;
-}
-
-.star-container__counter {
+  line-height: 25px;
   font-size: 20px;
 }
 
-.star-container__counter::before {
+.star-container__counter {
+}
+
+.star-container::before {
   content: url(../../static/icons/star.svg);
   width: 16px;
   height: 16px;
