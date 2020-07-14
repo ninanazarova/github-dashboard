@@ -20,8 +20,8 @@ export default {};
   border-bottom: 4px solid #000;
 }
 .header__logo {
-  font-size: 36px;
-  font-weight: 800;
+  font-size: 40px;
+  font-weight: 900;
   color: black;
   text-decoration: none;
 }

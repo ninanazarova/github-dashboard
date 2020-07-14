@@ -16,7 +16,7 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: '/fonts/fonts.css' },
+      { rel: 'stylesheet', href: '/fonts/montserrat.css' },
     ],
   },
   /*

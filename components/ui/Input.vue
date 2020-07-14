@@ -25,4 +25,10 @@ export default {
   min-width: 40%;
   outline: none;
 }
+
+.input::placeholder {
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+}
 </style>

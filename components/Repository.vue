@@ -15,9 +15,9 @@
           class="repo-container__star-count"
           :starsCount="starsCount"
         />
-        <commit-date class="repo-container__commit-date">
-          {{ commitDate }}
-        </commit-date>
+        <commit-date class="repo-container__commit-date">{{
+          commitDate
+        }}</commit-date>
       </div>
     </panel>
   </transition>
@@ -50,11 +50,9 @@ export default {
 .repo-container {
   display: flex;
   justify-content: space-between;
-  border-radius: 8px;
   background-color: #00000008;
   transition: opacity 0.3s linear;
   color: black;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   min-height: 128px;
 }
 

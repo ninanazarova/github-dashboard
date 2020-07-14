@@ -2,27 +2,37 @@
   <div class="pagination-container">
     <ul class="pagination__list">
       <li class="pagination__item">
-        <pagination-btn
-          theme="transparent"
-          size="content"
-          @click.native="setFirstPageGroup"
-          :disabled="firstDisabled"
-          >First</pagination-btn
+        <nuxt-link
+          class="pagination__link"
+          :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
+          <pagination-btn
+            :disabled="currentPage === 1"
+            @click.native="changeCurrentPage(1)"
+            >First</pagination-btn
+          >
+        </nuxt-link>
       </li>
       <li class="pagination__item">
-        <pagination-btn
-          theme="transparent"
-          direction="left"
-          @click.native="previousPageGroup"
-          :disabled="firstDisabled"
-        ></pagination-btn>
+        <nuxt-link
+          class="pagination__link"
+          :to="{ query: { search: $route.query.search, p: currentPage } }"
+        >
+          <pagination-btn
+            :disabled="currentPage === 1"
+            direction="left"
+            @click.native="changeCurrentPage(prevPage)"
+          ></pagination-btn>
+        </nuxt-link>
       </li>
     </ul>
 
     <ul class="pagination__list">
       <li class="pagination__item" v-for="index in pages" :key="index">
-        <nuxt-link :to="{ query: { search: $route.query.search, p: index } }">
+        <nuxt-link
+          class="pagination__link"
+          :to="{ query: { search: $route.query.search, p: index } }"
+        >
           <pagination-btn
             :active="index === currentPage"
             @click.native="changeCurrentPage(index)"
@@ -34,20 +44,28 @@
 
     <ul class="pagination__list">
       <li class="pagination__item">
-        <pagination-btn
-          theme="transparent"
-          direction="right"
-          @click.native="nextPageGroup"
-        ></pagination-btn>
+        <nuxt-link
+          class="pagination__link"
+          :to="{ query: { search: $route.query.search, p: currentPage } }"
+        >
+          <pagination-btn
+            direction="right"
+            :disabled="currentPage === 250"
+            @click.native="changeCurrentPage(nextPage)"
+          ></pagination-btn>
+        </nuxt-link>
       </li>
       <li class="pagination__item">
-        <pagination-btn
-          theme="transparent"
-          size="content"
-          @click.native="setLastPageGroup"
-          :disabled="finalDisabled"
-          >Last</pagination-btn
+        <nuxt-link
+          class="pagination__link"
+          :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
+          <pagination-btn
+            :disabled="currentPage === 250"
+            @click.native="changeCurrentPage(250)"
+            >Last</pagination-btn
+          >
+        </nuxt-link>
       </li>
     </ul>
   </div>
@@ -60,54 +78,51 @@ export default {
     'pagination-btn': PaginationBtn,
   },
 
-  props: ['query'],
-
   data() {
     return {
-      currentPage: 1,
+      currentPage: Number(this.$route.query.p),
       startIndex: 1,
+      pageRange: 5,
     };
   },
 
   computed: {
-    pagesCount() {
-      return 20;
-    },
-
-    btnsQuantity() {
-      if (process.browser) {
-        if (window.innerWidth <= 600) {
-          return 1;
-        }
-        if (window.innerWidth <= 768) {
-          return 3;
-        } else {
-          return 5;
-        }
-      }
-    },
-
-    finalIndex() {
-      const fidx = this.startIndex + this.btnsQuantity - 1;
-      return fidx;
-    },
-
     pages() {
       const arrToReturn = [];
-      console.log('jopa', this.finalIndex);
-      for (let i = this.startIndex; i <= this.finalIndex; i++) {
+      for (let i = this.rangeStart; i <= this.rangeEnd; i++) {
         arrToReturn.push(i);
       }
-
       return arrToReturn;
     },
-    //дизейбл "первая", если мы и так на первой странице пагинации
-    firstDisabled() {
-      return this.currentPage === 1;
+
+    rangeStart() {
+      if (process.browser) {
+        if (window.innerWidth < 768) {
+          this.pageRange = 4;
+        }
+        if (window.innerWidth < 560) {
+          this.pageRange = 3;
+        }
+      }
+      const start = Math.ceil(this.currentPage - this.pageRange / 2);
+      return start > 0 ? start : 1;
     },
-    //дизейбл "последняя", если мы и так на первой странице пагинации
-    finalDisabled() {
-      return this.currentPage === this.pagesCount;
+
+    rangeEnd() {
+      const end = this.pageRange + this.rangeStart - 1;
+      return end < this.pagesCount ? end : this.pagesCount;
+    },
+
+    pagesCount() {
+      return 250;
+    },
+
+    nextPage() {
+      return this.currentPage + 1;
+    },
+
+    prevPage() {
+      return this.currentPage - 1;
     },
   },
 
@@ -125,26 +140,6 @@ export default {
         search: this.$route.query.search,
       });
     },
-
-    nextPageGroup() {
-      this.startIndex = this.startIndex + this.btnsQuantity;
-    },
-    //получить предыдущую пачку кнопок навигации
-    previousPageGroup() {
-      if (this.startIndex !== 1) {
-        this.startIndex = this.startIndex - this.btnsQuantity;
-      }
-    },
-    //уйти на первую страницу
-    setFirstPageGroup() {
-      this.startIndex = 1;
-      this.changeCurrentPage(1);
-    },
-    //уйти на последнюю страницу
-    setLastPageGroup() {
-      this.startIndex = this.pagesCount - this.btnsQuantity + 1;
-      this.changeCurrentPage(this.pagesCount);
-    },
   },
 };
 </script>
@@ -161,5 +156,8 @@ export default {
   padding: 0;
   display: flex;
   align-items: center;
+}
+.pagination__link {
+  text-decoration: none;
 }
 </style>

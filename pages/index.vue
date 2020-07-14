@@ -1,6 +1,6 @@
 <template>
   <main class="index">
-    <form class="index__form" @submit.prevent="searchRepositories">
+    <form class="index__form" @submit.prevent="searchRepositories" novalidate>
       <nxt-input
         :placeholder="'search repo'"
         :type="'text'"
@@ -88,6 +88,12 @@ export default {
 
   methods: {
     searchRepositories() {
+      if (this.search === '') {
+        this.$store.dispatch('repositories/fetchRepositories', {
+          page: this.$route.query.p,
+        });
+        this.$router.replace({ query });
+      }
       this.$router.push({ query: { search: this.search } });
       this.$route.query.p = 1;
       this.$store.dispatch('repositories/fetchRepositories', {

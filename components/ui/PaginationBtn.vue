@@ -3,8 +3,6 @@
     <button
       :class="[
         'pagination-btn',
-        `pagination-btn_theme_${theme}`,
-        `pagination-btn_size_${size}`,
         `pagination-btn_direction_${direction}`,
         { 'pagination-btn_active': active },
       ]"
@@ -18,14 +16,6 @@
 <script>
 export default {
   props: {
-    theme: {
-      type: String,
-      default: 'default',
-    },
-    size: {
-      type: String,
-      default: 'l',
-    },
     direction: {
       type: String,
       default: 'default',
@@ -47,42 +37,16 @@ export default {
   display: flex;
   border: none;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 18px;
-  text-align: center;
+  font-weight: 300;
+  font-size: 20px;
   outline: none;
   justify-content: center;
-  transition: all 0.2s linear;
-}
-
-.pagination-btn_theme_default {
-  background-color: #fbfbfb;
-}
-.pagination-btn_theme_default:hover {
-  cursor: pointer;
-  background-color: #f4f4f4;
-}
-.pagination-btn_theme_transparent {
-  background-color: transparent;
-}
-.pagination-btn_theme_transparent:hover {
-  opacity: 0.8;
-}
-
-.pagination-btn_size_l {
-  width: 58px;
-  height: 58px;
-  line-height: 58px;
-}
-.pagination-btn_size_m {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-}
-.pagination-btn_size_content {
-  width: initial;
-  height: initial;
-  margin: auto;
+  align-items: center;
+  /* transition: all 0.2s linear; */
+  min-width: 70px;
+  min-height: 48px;
+  padding: 4px 20px;
+  background-color: #fff;
 }
 
 .pagination-btn_direction_right {
@@ -99,5 +63,19 @@ export default {
   background-position: center;
   width: 22px;
   height: 22px;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pagination-btn_active {
+  background-color: black;
+  color: #fff;
+}
+.pagination-btn_active:hover {
+  background-color: black;
+  color: #fff;
 }
 </style>
