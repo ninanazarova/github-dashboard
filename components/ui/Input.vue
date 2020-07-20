@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ['type', 'placeholder', 'name', 'required'],
+  props: ['type', 'placeholder', 'name', 'required', 'input'],
 };
 </script>
 

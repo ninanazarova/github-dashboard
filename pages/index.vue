@@ -1,6 +1,6 @@
 <template>
   <main class="index">
-    <form class="index__form" @submit.prevent="searchRepositories" novalidate>
+    <form class="index__form" @submit.prevent="searchRepositories">
       <nxt-input
         :placeholder="'search repo'"
         :type="'text'"
@@ -8,24 +8,25 @@
         :required="'required'"
         v-model="search"
       />
-      <nxt-button :theme="'light'" :block="'index'">search</nxt-button>
+      <nxt-button
+        :name="'clear'"
+        type="button"
+        :role="'clear'"
+        :block="'index'"
+        @click.native="clearSearch"
+      >clear</nxt-button>
+      <nxt-button :name="'submit'" type="submit" :role="'search'" :block="'index'">search</nxt-button>
     </form>
 
     <h2
       class="index__title"
       v-if="$route.query.search && repositories.total_count !== 0"
-    >
-      Search results by {{ $route.query.search }}
-    </h2>
+    >Search results by {{ $route.query.search }}</h2>
     <h2
       class="index__title"
       v-if="$route.query.search && repositories.total_count == 0"
-    >
-      Search results by {{ $route.query.search }} not found
-    </h2>
-    <h2 class="index__title" v-if="!$route.query.search">
-      Most popular repositories
-    </h2>
+    >Search results by {{ $route.query.search }} not found</h2>
+    <h2 class="index__title" v-if="!$route.query.search">Most popular repositories</h2>
 
     <ul class="index__repository-list repository-list">
       <li
@@ -43,7 +44,7 @@
       </li>
     </ul>
 
-    <pagination v-if="!$route.query.search && repositories.total_count !== 0" />
+    <pagination v-if="repositories.total_count !== 0" />
   </main>
 </template>
 
@@ -82,20 +83,26 @@ export default {
     }
     this.$store.dispatch('repositories/fetchRepositories', {
       page: this.$route.query.p,
-      search: this.$route.query.search,
+      search: this.search,
     });
   },
 
   methods: {
-    searchRepositories() {
-      if (this.search === '') {
+    clearSearch() {
+      const input = event.target.form.elements.search;
+      if (input.value !== '') {
+        input.value = '';
+        this.$route.query.p = 1;
+        this.$router.replace({ path: '/?p=1' });
         this.$store.dispatch('repositories/fetchRepositories', {
           page: this.$route.query.p,
         });
-        this.$router.replace({ query });
       }
-      this.$router.push({ query: { search: this.search } });
-      this.$route.query.p = 1;
+    },
+
+    searchRepositories() {
+      this.$router.push({ query: { p: 1, search: this.search } });
+
       this.$store.dispatch('repositories/fetchRepositories', {
         search: this.search,
         page: this.$route.query.p,

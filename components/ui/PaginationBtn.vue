@@ -38,14 +38,12 @@ export default {
   border: none;
   cursor: pointer;
   font-weight: 300;
-  font-size: 20px;
+  font-size: 18px;
   outline: none;
   justify-content: center;
   align-items: center;
-  /* transition: all 0.2s linear; */
   min-width: 70px;
   min-height: 48px;
-  padding: 4px 20px;
   background-color: #fff;
 }
 
@@ -53,16 +51,14 @@ export default {
   background-image: url(../../static/icons/right-arrow.svg);
   background-repeat: no-repeat;
   background-position: center;
-  width: 22px;
-  height: 22px;
+  background-size: 15px;
 }
 
 .pagination-btn_direction_left {
   background-image: url(../../static/icons/left-arrow.svg);
   background-repeat: no-repeat;
   background-position: center;
-  width: 22px;
-  height: 22px;
+  background-size: 15px;
 }
 
 .pagination-btn:disabled {

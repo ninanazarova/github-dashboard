@@ -2,11 +2,7 @@
   <main class="repository">
     <panel class="repository__panel">
       <h1 class="repository__name">
-        <github-link
-          class="repository__name-link"
-          :githubLink="repository.html_url"
-          >{{ repository.name }}</github-link
-        >
+        <github-link :elem="'name'" :githubLink="repository.html_url">{{ repository.name }}</github-link>
       </h1>
       <div class="flex-container">
         <div class="flex-container_column_left">
@@ -15,9 +11,11 @@
 
             <p class="repository__description">{{ repository.description }}</p>
 
-            <commit-date class="repository__commit-date">{{
+            <commit-date class="repository__commit-date">
+              {{
               repository.pushed_at
-            }}</commit-date>
+              }}
+            </commit-date>
 
             <star-counter
               class="repository__star-container"
@@ -25,11 +23,7 @@
             />
             <h2 class="title">Top languages</h2>
             <ul class="repository__lang-list lang-list">
-              <li
-                v-for="language in languages"
-                :key="language.id"
-                class="lang-list__item"
-              >
+              <li v-for="language in languages" :key="language.id" class="lang-list__item">
                 <svg
                   class="octicon"
                   :style="`color:${colorsOfLanguages[`${language}`].color}`"
@@ -54,10 +48,7 @@
                 :key="contributor.id"
                 class="repository__contributor"
               >
-                <a
-                  class="repository__contributor-link"
-                  :href="contributor.html_url"
-                >
+                <a class="repository__contributor-link" :href="contributor.html_url">
                   <img
                     class="repository__contributor-photo"
                     :src="contributor.avatar_url"
@@ -71,16 +62,9 @@
 
         <div class="flex-container_column_right repository__owner">
           <h2 class="title">Owner</h2>
-          <img
-            class="repository__owner-photo"
-            :src="repository.owner.avatar_url"
-          />
+          <img class="repository__owner-photo" :src="repository.owner.avatar_url" />
           <p class="repository__owner-name">{{ repository.owner.login }}</p>
-          <github-link
-            class="repository__owner-link"
-            :githubLink="repository.owner.html_url"
-            >GitHub</github-link
-          >
+          <github-link :elem="'owner'" :githubLink="repository.owner.html_url">GitHub</github-link>
         </div>
       </div>
     </panel>
@@ -111,7 +95,6 @@ export default {
     },
 
     colorsOfLanguages() {
-      console.log(this.$store.getters['languages/getColors']);
       return this.$store.getters['languages/getColors'];
     },
 
@@ -156,11 +139,6 @@ export default {
 
 .repository__name {
   margin-bottom: 40px;
-}
-
-.repository__name-link {
-  font-size: 28px;
-  font-weight: 900;
 }
 
 .flex-container {
@@ -231,10 +209,6 @@ export default {
   margin-top: 8px;
   font-size: 20px;
   font-weight: bold;
-}
-
-.repository__owner-link {
-  margin-top: 8px;
 }
 
 .repository__contributors-list {

@@ -4,8 +4,7 @@
       to="/"
       v-if="$route.path !== '/'"
       class="header__logo header__logo_link"
-      >github-dashboard</nuxt-link
-    >
+    >github-dashboard</nuxt-link>
     <h1 v-else class="header__logo">github-dashboard</h1>
   </header>
 </template>

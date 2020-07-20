@@ -1,48 +1,44 @@
 <template>
-  <button :class="['button', `${block}__button`, `button_theme_${theme}`]">
+  <button :class="['button', `${block}__button`, `button_type_${role}`]" :name="`${name}`">
     <slot>some button</slot>
   </button>
 </template>
 
 <script>
 export default {
-  props: ['theme', 'block'],
+  props: ['role', 'block', 'name'],
 };
 </script>
 
 <style scoped>
 .button {
-  font-size: 20px;
-  font-weight: 300;
   cursor: pointer;
-  padding: 12px;
+  padding: 0 16px;
   box-sizing: border-box;
-  min-width: 10%;
   outline: none;
+  font-weight: 400;
 }
 
-.container__button {
-}
+.button_type_search {
+  font-size: 20px;
 
-.button_theme_light {
+  min-width: 10%;
   background-color: black;
   color: white;
   border: 2px solid black;
 }
 
-.button_theme_light:hover {
+.button_type_search:hover {
   background-color: white;
   color: black;
 }
 
-.button_theme_dark {
-  background-color: black;
-  color: white;
-  border: 2px solid white;
-}
-
-.button_theme_dark:hover {
+.button_type_clear {
+  font-size: 12px;
   background-color: white;
   color: black;
+  border: 2px solid black;
+  border-right: none;
+  border-left: none;
 }
 </style>

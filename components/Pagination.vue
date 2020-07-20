@@ -6,11 +6,7 @@
           class="pagination__link"
           :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
-          <pagination-btn
-            :disabled="currentPage === 1"
-            @click.native="changeCurrentPage(1)"
-            >First</pagination-btn
-          >
+          <pagination-btn :disabled="currentPage === 1" @click.native="changeCurrentPage(1)">First</pagination-btn>
         </nuxt-link>
       </li>
       <li class="pagination__item">
@@ -36,8 +32,7 @@
           <pagination-btn
             :active="index === currentPage"
             @click.native="changeCurrentPage(index)"
-            >{{ index }}</pagination-btn
-          >
+          >{{ index }}</pagination-btn>
         </nuxt-link>
       </li>
     </ul>
@@ -50,7 +45,7 @@
         >
           <pagination-btn
             direction="right"
-            :disabled="currentPage === 250"
+            :disabled="currentPage === pagesCount"
             @click.native="changeCurrentPage(nextPage)"
           ></pagination-btn>
         </nuxt-link>
@@ -61,10 +56,9 @@
           :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
           <pagination-btn
-            :disabled="currentPage === 250"
-            @click.native="changeCurrentPage(250)"
-            >Last</pagination-btn
-          >
+            :disabled="currentPage === pagesCount"
+            @click.native="changeCurrentPage(pagesCount)"
+          >Last</pagination-btn>
         </nuxt-link>
       </li>
     </ul>
@@ -80,7 +74,6 @@ export default {
 
   data() {
     return {
-      currentPage: Number(this.$route.query.p),
       startIndex: 1,
       pageRange: 5,
     };
@@ -95,16 +88,19 @@ export default {
       return arrToReturn;
     },
 
+    currentPage() {
+      return Number(this.$route.query.p);
+    },
+
     rangeStart() {
-      if (process.browser) {
-        if (window.innerWidth < 768) {
-          this.pageRange = 4;
-        }
-        if (window.innerWidth < 560) {
-          this.pageRange = 3;
-        }
+      if (window.innerWidth < 768) {
+        this.pageRange = 3;
       }
-      const start = Math.ceil(this.currentPage - this.pageRange / 2);
+      if (window.innerWidth < 560) {
+        this.pageRange = 1;
+      }
+
+      const start = this.currentPage - this.pageRange + 1;
       return start > 0 ? start : 1;
     },
 
@@ -114,7 +110,7 @@ export default {
     },
 
     pagesCount() {
-      return 250;
+      return 50;
     },
 
     nextPage() {
@@ -129,14 +125,13 @@ export default {
   methods: {
     changeCurrentPage(index) {
       this.currentPage = index;
-
+      console.log(index);
       this.$router.push({
         query: { p: index, search: this.$route.query.search },
       });
-      this.$route.query.p = index;
 
       this.$store.dispatch('repositories/fetchRepositories', {
-        page: this.$route.query.p,
+        page: index,
         search: this.$route.query.search,
       });
     },
