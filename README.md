@@ -1,6 +1,10 @@
 # github-dashboard
 
-> project for Avito internship
+_v 1.0.0_
+
+> pet project для изучения Nuxt.js с поиском и просмотром самых популярных репозиториев гитхаба
+
+Работа с директивами vue, настройка роутинга с query-параметрами, Vuex
 
 ## Build Setup
 
@@ -18,5 +22,3 @@ $ npm run start
 # generate static project
 $ npm run generate
 ```
-
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

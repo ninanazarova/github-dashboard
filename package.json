@@ -1,7 +1,7 @@
 {
   "name": "github-dashboard",
   "version": "1.0.0",
-  "description": "project for Avito internship",
+  "description": "project for learning Nuxt.js",
   "author": "Nina Nazarova",
   "private": true,
   "scripts": {

@@ -65,11 +65,6 @@ export default {
   font-weight: 300;
 }
 
-.repo-container a {
-  color: black;
-  text-decoration: none;
-}
-
 .repo-container__name {
   line-height: normal;
   font-size: 20px;
@@ -93,6 +88,12 @@ export default {
   cursor: pointer;
   line-height: 25px;
   font-size: 20px;
+  color: black;
+  text-decoration: none;
+}
+
+.repo-container__link:hover {
+  text-decoration: underline;
 }
 
 .repo-container__commit-date {
