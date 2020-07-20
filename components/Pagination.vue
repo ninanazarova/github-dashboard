@@ -6,7 +6,11 @@
           class="pagination__link"
           :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
-          <pagination-btn :disabled="currentPage === 1" @click.native="changeCurrentPage(1)">First</pagination-btn>
+          <pagination-btn
+            :disabled="currentPage === 1"
+            @click.native="changeCurrentPage(1)"
+            >First</pagination-btn
+          >
         </nuxt-link>
       </li>
       <li class="pagination__item">
@@ -32,7 +36,8 @@
           <pagination-btn
             :active="index === currentPage"
             @click.native="changeCurrentPage(index)"
-          >{{ index }}</pagination-btn>
+            >{{ index }}</pagination-btn
+          >
         </nuxt-link>
       </li>
     </ul>
@@ -58,7 +63,8 @@
           <pagination-btn
             :disabled="currentPage === pagesCount"
             @click.native="changeCurrentPage(pagesCount)"
-          >Last</pagination-btn>
+            >Last</pagination-btn
+          >
         </nuxt-link>
       </li>
     </ul>

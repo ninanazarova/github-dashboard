@@ -5,15 +5,20 @@
         <nuxt-link :to="repositoryFullName" class="repo-container__link">
           <span class="repo-container__name">{{ repositoryTitle }}</span>
         </nuxt-link>
-        <github-link :classname="'repo-container__github-link'" :href="githubLink">GitHub</github-link>
+        <github-link
+          :classname="'repo-container__github-link'"
+          :href="githubLink"
+          >GitHub</github-link
+        >
       </div>
 
       <div class="repo-container__column repo-container__column_right">
-        <star-counter class="repo-container__star-count" :starsCount="starsCount" />
+        <star-counter
+          class="repo-container__star-count"
+          :starsCount="starsCount"
+        />
         <commit-date class="repo-container__commit-date">
-          {{
-          commitDate
-          }}
+          {{ commitDate }}
         </commit-date>
       </div>
     </panel>

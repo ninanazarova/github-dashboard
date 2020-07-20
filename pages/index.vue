@@ -14,19 +14,32 @@
         :role="'clear'"
         :block="'index'"
         @click.native="clearSearch"
-      >clear</nxt-button>
-      <nxt-button :name="'submit'" type="submit" :role="'search'" :block="'index'">search</nxt-button>
+        >clear</nxt-button
+      >
+      <nxt-button
+        :name="'submit'"
+        type="submit"
+        :role="'search'"
+        :block="'index'"
+        >search</nxt-button
+      >
     </form>
 
     <h2
       class="index__title"
       v-if="$route.query.search && repositories.total_count !== 0"
-    >Search results by {{ $route.query.search }}</h2>
+    >
+      Search results by {{ $route.query.search }}
+    </h2>
     <h2
       class="index__title"
       v-if="$route.query.search && repositories.total_count == 0"
-    >Search results by {{ $route.query.search }} not found</h2>
-    <h2 class="index__title" v-if="!$route.query.search">Most popular repositories</h2>
+    >
+      Search results by {{ $route.query.search }} not found
+    </h2>
+    <h2 class="index__title" v-if="!$route.query.search">
+      Most popular repositories
+    </h2>
 
     <ul class="index__repository-list repository-list">
       <li

@@ -1,5 +1,8 @@
 <template>
-  <button :class="['button', `${block}__button`, `button_type_${role}`]" :name="`${name}`">
+  <button
+    :class="['button', `${block}__button`, `button_type_${role}`]"
+    :name="`${name}`"
+  >
     <slot>some button</slot>
   </button>
 </template>
