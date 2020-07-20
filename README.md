@@ -6,6 +6,8 @@ pet project для изучения Nuxt.js с поиском и просмот�
 
 Работа с директивами vue, настройка роутинга с query-параметрами, Vuex
 
+[Heroku app](https://ghub-dashboard.herokuapp.com/)
+
 ## Build Setup
 
 ```bash
