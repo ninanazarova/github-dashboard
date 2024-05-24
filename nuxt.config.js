@@ -1,4 +1,4 @@
-export default {
+export default defineNuxtConfig({
   mode: 'spa',
   /*
    ** Headers of the page
@@ -62,4 +62,4 @@ export default {
     name: 'fade',
     mode: 'out-in',
   },
-};
+});
