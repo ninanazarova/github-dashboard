@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   mode: 'spa',
   /*
@@ -31,26 +33,14 @@ export default defineNuxtConfig({
    ** Plugins to load before mounting the App
    */
   plugins: [],
-  /*
-   ** Nuxt.js dev-modules
-   */
-  buildModules: [],
-  /*
-   ** Nuxt.js modules
-   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
+    '@pinia/nuxt',
   ],
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  axios: {},
-  /*
-   ** Build configuration
-   */
+  pinia: {
+    autoImports: ['defineStore'],
+  },
+
   build: {
     /*
      ** You can extend webpack config here

@@ -1,28 +1,29 @@
-import axios from 'axios';
-
-export const state = () => ({
-  contributors: [],
+export const useContributorsStore = defineStore('contributors', {
+  state: () => ({
+    contributors: [],
+    loading: false,
+    error: null,
+  }),
+  actions: {
+    async fetchContributors(fullName) {
+      try {
+        this.loading = true;
+        const response = await fetch(
+          `https://api.github.com/repos/${fullName}/contributors`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to fetch Contributors');
+        }
+        const data = await response.json();
+        this.contributors = data.slice(0, 10);
+      } catch (error) {
+        this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+  getters: {
+    getContributors: state => state.contributors,
+  },
 });
-
-export const mutations = {
-  setState: (state, { contributors }) => {
-    state.contributors = contributors.slice(0, 10);
-  },
-};
-
-export const actions = {
-  fetchContributors(state, { fullName }) {
-    return axios
-      .get(`https://api.github.com/repos/${fullName}/contributors`)
-      .then(res => {
-        return state.commit('setState', { contributors: res.data });
-      })
-      .catch(err => console.log(err));
-  },
-};
-
-export const getters = {
-  getContributors(state) {
-    return state.contributors;
-  },
-};
