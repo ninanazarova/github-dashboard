@@ -4,11 +4,11 @@
       <li class="pagination__item">
         <nuxt-link
           class="pagination__link"
-          :to="{ query: { search: $route.query.search, p: currentPage } }"
+          :to="{ query: { search: route.query.search, p: currentPage } }"
         >
           <PaginationBtn
             :disabled="currentPage === 1"
-            @click.native="changeCurrentPage(1)"
+            @click="changeCurrentPage(1)"
             >First</PaginationBtn
           >
         </nuxt-link>
@@ -16,12 +16,12 @@
       <li class="pagination__item">
         <nuxt-link
           class="pagination__link"
-          :to="{ query: { search: $route.query.search, p: currentPage } }"
+          :to="{ query: { search: route.query.search, p: currentPage } }"
         >
           <pagination-btn
             :disabled="currentPage === 1"
             direction="left"
-            @click.native="changeCurrentPage(prevPage)"
+            @click="changeCurrentPage(prevPage)"
           ></pagination-btn>
         </nuxt-link>
       </li>
@@ -31,11 +31,11 @@
       <li class="pagination__item" v-for="index in pages" :key="index">
         <nuxt-link
           class="pagination__link"
-          :to="{ query: { search: $route.query.search, p: index } }"
+          :to="{ query: { search: route.query.search, p: index } }"
         >
           <pagination-btn
             :active="index === currentPage"
-            @click.native="changeCurrentPage(index)"
+            @click="changeCurrentPage(index)"
             >{{ index }}</pagination-btn
           >
         </nuxt-link>
@@ -46,23 +46,23 @@
       <li class="pagination__item">
         <nuxt-link
           class="pagination__link"
-          :to="{ query: { search: $route.query.search, p: currentPage } }"
+          :to="{ query: { search: route.query.search, p: currentPage } }"
         >
           <pagination-btn
             direction="right"
             :disabled="currentPage === pagesCount"
-            @click.native="changeCurrentPage(nextPage)"
+            @click="changeCurrentPage(nextPage)"
           ></pagination-btn>
         </nuxt-link>
       </li>
       <li class="pagination__item">
         <nuxt-link
           class="pagination__link"
-          :to="{ query: { search: $route.query.search, p: currentPage } }"
+          :to="{ query: { search: route.query.search, p: currentPage } }"
         >
           <PaginationBtn
             :disabled="currentPage === pagesCount"
-            @click.native="changeCurrentPage(pagesCount)"
+            @click="changeCurrentPage(pagesCount)"
             >Last</PaginationBtn
           >
         </nuxt-link>
@@ -81,44 +81,50 @@ const route = useRoute();
 const router = useRouter();
 const { $viewport } = useNuxtApp();
 
-watch($viewport.breakpoint, (newBreakpoint, oldBreakpoint) => {
-  console.log('Breakpoint updated:', oldBreakpoint, '->', newBreakpoint);
-});
-
-const startIndex = ref(1);
+const currentPage = ref(parseInt(route.query.p) || 1);
+const pagesCount = ref(50);
 const pageRange = ref(5);
+
+watch(
+  $viewport.breakpoint,
+  (newBreakpoint) => {
+    if ($viewport.isLessThan('tablet')) {
+      pageRange.value = 3;
+    } else {
+      pageRange.value = 5;
+    }
+  },
+  { immediate: true }
+);
 
 const pages = computed(() => {
   const arrToReturn = [];
-  for (let i = rangeStart; i <= rangeEnd; i++) {
+  for (let i = rangeStart.value; i <= rangeEnd.value; i++) {
     arrToReturn.push(i);
   }
   return arrToReturn;
 });
-const pagesCount = computed(() => 50);
-const currentPage = computed(() => route.query.p);
+
 const rangeStart = computed(() => {
-  if ($viewport.isLessThan('tablet')) {
-    pageRange.value = 3;
-  }
-
-  if ($viewport.isLessThan('mobileWide')) {
-    pageRange.value = 3;
-  }
-
-  const start = currentPage.value - pageRange.value + 1;
+  const start = currentPage.value - Math.floor(pageRange.value / 2);
   return start > 0 ? start : 1;
 });
 const rangeEnd = computed(() => {
   const end = pageRange.value + rangeStart.value - 1;
   return end < pagesCount.value ? end : pagesCount.value;
 });
-const nextPage = computed(() => currentPage.value + 1);
-const prevPage = computed(() => currentPage.value - 1);
+
+const nextPage = computed(() =>
+  currentPage.value < pagesCount.value
+    ? currentPage.value + 1
+    : pagesCount.value
+);
+const prevPage = computed(() =>
+  currentPage.value > 1 ? currentPage.value - 1 : 1
+);
 
 async function changeCurrentPage(index) {
   currentPage.value = index;
-  console.log(index);
   router.push({
     query: { p: index, search: route.query.search },
   });
