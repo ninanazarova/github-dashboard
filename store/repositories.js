@@ -9,26 +9,19 @@ export const useRepositoriesStore = defineStore('repositories', {
     error: null,
   }),
   actions: {
-    async fetchRepositories({ page, search }) {
-      // const baseUrl = 'https://api.github.com/search/repositories?';
+    async fetchRepositories({ page, search = '' }) {
+      const url = new URL('https://api.github.com/search/repositories');
 
-      const params = {
+      const params = new URLSearchParams({
         type: 'Repositories',
+        q: 'stars:>0',
         sort: 'stars',
         page: page || 1,
         per_page: 4,
-      };
+      });
+      if (search) params.append('q', search);
 
-      const searchParams = new URLSearchParams(params);
-      searchParams.append('q', 'stars:>0');
-      if (search) {
-        searchParams.append('q', search);
-      }
-      console.log(searchParams.toString());
-
-      let url = search
-        ? `https://api.github.com/search/repositories?q=stars:>0&sort=stars&q=${search}&type=Repositories&page=${page}&per_page=4`
-        : `https://api.github.com/search/repositories?q=stars:>0&sort=stars&type=Repositories&page=${page}&per_page=4`;
+      url.search = params.toString();
 
       try {
         this.loading = true;

@@ -81,13 +81,13 @@ const route = useRoute();
 const router = useRouter();
 const { $viewport } = useNuxtApp();
 
-const currentPage = ref(parseInt(route.query.p) || 1);
+const currentPage = computed(() => parseInt(route.query.p) || 1);
 const pagesCount = ref(50);
 const pageRange = ref(5);
 
 watch(
   $viewport.breakpoint,
-  (newBreakpoint) => {
+  () => {
     if ($viewport.isLessThan('tablet')) {
       pageRange.value = 3;
     } else {

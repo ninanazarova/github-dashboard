@@ -68,29 +68,25 @@ import { ref } from 'vue';
 const store = useRepositoriesStore();
 const router = useRouter();
 const route = useRoute();
-const search = ref();
+const search = ref(route.query.search || '');
 
 await useAsyncData('repositories', () => {
-  if (route.query.p) {
-    route.query.p = 1;
-  }
+  const page = parseInt(route.query.p) || 1;
   store.fetchRepositories({
-    page: route.query.p ? route.query.p : 1,
-    search: search.value ? search.value : '',
+    page,
+    search: search.value,
   });
 });
 
 function clearSearch() {
   if (search.value) {
     search.value = '';
-    // route.query.p = 1;
-    router.replace({ path: '/?p=1' });
+    router.push({ query: { p: 1 } });
     store.fetchRepositories({ page: route.query.p });
   }
 }
 
 function searchRepositories() {
-  console.log('first:  ', search.value);
   router.push({ query: { p: 1, search: search.value } });
   store.fetchRepositories({ page: route.query.p, search: search.value });
 }
