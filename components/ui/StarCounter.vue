@@ -26,7 +26,7 @@ export default {
 }
 
 .star-container::before {
-  content: url(../../static/icons/star.svg);
+  content: url(../../public/icons/star.svg);
   width: 16px;
   height: 16px;
   margin-right: 8px;

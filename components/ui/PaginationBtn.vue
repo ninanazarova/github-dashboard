@@ -48,14 +48,14 @@ export default {
 }
 
 .pagination-btn_direction_right {
-  background-image: url(../../static/icons/right-arrow.svg);
+  background-image: url(../../public/icons/right-arrow.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 15px;
 }
 
 .pagination-btn_direction_left {
-  background-image: url(../../static/icons/left-arrow.svg);
+  background-image: url(../../public/icons/left-arrow.svg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 15px;
