@@ -46,7 +46,9 @@ export const useRepositoriesStore = defineStore('repositories', {
     async fetchRepository(fullName) {
       try {
         this.loading = true;
-        const response = await fetch(`https://api.github.com/repos${fullName}`);
+        const response = await fetch(
+          `https://api.github.com/repos/${fullName}`
+        );
         if (!response.ok) {
           throw new Error('Failed to fetch Repository');
         }

@@ -1,10 +1,10 @@
 <template>
   <main class="repository">
-    <panel class="repository__panel">
+    <Panel class="repository__panel">
       <h1 class="repository__name">
-        <github-link :elem="'name'" :githubLink="repository.html_url">{{
+        <Link :elem="'name'" :githubLink="repository.html_url">{{
           repository.name
-        }}</github-link>
+        }}</Link>
       </h1>
       <div class="flex-container">
         <div class="flex-container_column_left">
@@ -13,11 +13,11 @@
 
             <p class="repository__description">{{ repository.description }}</p>
 
-            <commit-date class="repository__commit-date">
+            <CommitDate class="repository__commit-date">
               {{ repository.pushed_at }}
-            </commit-date>
+            </CommitDate>
 
-            <star-counter
+            <StarCounter
               class="repository__star-container"
               :starsCount="repository.stargazers_count"
             />
@@ -30,7 +30,7 @@
               >
                 <svg
                   class="octicon"
-                  :style="`color:${colorsOfLanguages[`${language}`].color}`"
+                  :style="`color:${colors[`${language}`].color}`"
                   viewBox="0 0 16 16"
                   version="1.1"
                   width="20"
@@ -69,72 +69,51 @@
 
         <div class="flex-container_column_right repository__owner">
           <h2 class="title">Owner</h2>
-          <img
+          <!-- <img
             class="repository__owner-photo"
             :src="repository.owner.avatar_url"
           />
           <p class="repository__owner-name">{{ repository.owner.login }}</p>
-          <github-link :elem="'owner'" :githubLink="repository.owner.html_url"
-            >GitHub</github-link
-          >
+          <Link :elem="'owner'" :githubLink="repository.owner.html_url"
+            >GitHub</Link
+          > -->
         </div>
       </div>
-    </panel>
+    </Panel>
   </main>
 </template>
 
-<script>
+<script setup>
 import Panel from '@/components/Panel';
 import Link from '@/components/ui/Link';
 import StarCounter from '@/components/ui/StarCounter';
 import CommitDate from '@/components/ui/CommitDate';
+import {
+  useRepositoriesStore,
+  useContributorsStore,
+  useLanguagesStore,
+} from '~/store';
 
-export default {
-  components: {
-    panel: Panel,
-    'github-link': Link,
-    'star-counter': StarCounter,
-    'commit-date': CommitDate,
-  },
+const route = useRoute();
 
-  computed: {
-    repository() {
-      return this.$store.getters['repositories/getRepository'];
-    },
+const repositoriesStore = useRepositoriesStore();
+const contributorsStore = useContributorsStore();
+const languagesStore = useLanguagesStore();
 
-    languages() {
-      return this.$store.getters['languages/getLanguages'];
-    },
+onMounted(async () => {
+  const name = `${route.params.user}/${route.params.repository}`;
+  await Promise.all([
+    repositoriesStore.fetchRepository(name),
+    contributorsStore.fetchContributors(name),
+    languagesStore.fetchLanguages(name),
+    languagesStore.fetchColors(),
+  ]);
+});
 
-    colorsOfLanguages() {
-      return this.$store.getters['languages/getColors'];
-    },
-
-    contributors() {
-      return this.$store.getters['contributors/getContributors'];
-    },
-  },
-
-  created() {
-    this.$store.dispatch('languages/fetchLanguages', {
-      fullName: this.repository.full_name,
-    });
-    this.$store.dispatch('contributors/fetchContributors', {
-      fullName: this.repository.full_name,
-    });
-  },
-
-  async fetch({ store, route, error }) {
-    await store
-      .dispatch('repositories/fetchRepository', {
-        fullName: route.path,
-      })
-      .catch(e => {
-        error({ statusCode: 404, message: 'Post not found' });
-      });
-    await store.dispatch('languages/fetchcColorsOfLanguages');
-  },
-};
+const repository = computed(() => repositoriesStore.getRepository);
+const languages = computed(() => languagesStore.getLanguages);
+const contributors = computed(() => contributorsStore.getContributors);
+const colors = computed(() => languagesStore.getColors);
 </script>
 
 <style scoped>

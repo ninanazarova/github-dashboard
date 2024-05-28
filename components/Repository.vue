@@ -1,57 +1,51 @@
 <template>
   <transition name="fade" mode="out-in" appear>
-    <panel class="repo-container" @s="changeColor">
+    <Panel class="repo-container" @s="changeColor">
       <div class="repo-container__column repo-container__column_left">
-        <nuxt-link :to="repositoryFullName" class="repo-container__link">
-          <span class="repo-container__name">{{ repositoryTitle }}</span>
-        </nuxt-link>
-        <github-link
-          :classname="'repo-container__github-link'"
-          :href="githubLink"
-          >GitHub</github-link
+        <NuxtLink
+          :to="`/user-${repositoryUser}/${repositoryName}`"
+          class="repo-container__link"
+        >
+          <span class="repo-container__name">{{
+            repositoryUser + ' / ' + repositoryName
+          }}</span>
+        </NuxtLink>
+        <Link :classname="'repo-container__github-link'" :href="githubLink"
+          >GitHub</Link
         >
       </div>
 
       <div class="repo-container__column repo-container__column_right">
-        <star-counter
+        <StarCounter
           class="repo-container__star-count"
           :starsCount="starsCount"
         />
-        <commit-date class="repo-container__commit-date">
+        <commitDate class="repo-container__commit-date">
           {{ commitDate }}
-        </commit-date>
+        </commitDate>
       </div>
-    </panel>
+    </Panel>
   </transition>
 </template>
 
-<script>
+<script setup>
 import Panel from '@/components/Panel';
 import Link from '@/components/ui/Link';
 import StarCounter from '@/components/ui/StarCounter';
 import CommitDate from '@/components/ui/CommitDate';
-export default {
-  props: [
-    'repositoryTitle',
-    'repositoryFullName',
-    'githubLink',
-    'starsCount',
-    'commitDate',
-  ],
+import { defineProps } from 'vue';
 
-  components: {
-    panel: Panel,
-    'star-counter': StarCounter,
-    'commit-date': CommitDate,
-    'github-link': Link,
-  },
+const props = defineProps([
+  'repositoryUser',
+  'repositoryName',
+  'githubLink',
+  'starsCount',
+  'commitDate',
+]);
 
-  methods: {
-    changeColor(event) {
-      console.log(event.bubbles);
-    },
-  },
-};
+function changeColor(event) {
+  console.log(event.bubbles);
+}
 </script>
 
 <style scoped>

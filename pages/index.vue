@@ -44,8 +44,8 @@
         class="repository-list__item"
       >
         <Repository
-          :repositoryTitle="repository.owner.login + ' / ' + repository.name"
-          :repositoryFullName="repository.full_name"
+          :repositoryUser="repository.owner.login"
+          :repositoryName="repository.name"
           :githubLink="repository.html_url"
           :starsCount="repository.stargazers_count"
           :commitDate="repository.pushed_at"
@@ -78,17 +78,20 @@ await useAsyncData('repositories', () => {
   });
 });
 
-function clearSearch() {
+async function clearSearch() {
   if (search.value) {
     search.value = '';
-    router.push({ query: { p: 1 } });
-    store.fetchRepositories({ page: route.query.p });
+
+    await navigateTo({ query: { p: 1 } });
+
+    await store.fetchRepositories({ page: route.query.p });
   }
 }
 
-function searchRepositories() {
-  router.push({ query: { p: 1, search: search.value } });
-  store.fetchRepositories({ page: route.query.p, search: search.value });
+async function searchRepositories() {
+  await navigateTo({ query: { search: search.value, p: 1 } });
+
+  await store.fetchRepositories({ page: route.query.p, search: search.value });
 }
 </script>
 

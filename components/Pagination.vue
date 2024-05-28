@@ -125,9 +125,8 @@ const prevPage = computed(() =>
 
 async function changeCurrentPage(index) {
   currentPage.value = index;
-  router.push({
-    query: { p: index, search: route.query.search },
-  });
+  await navigateTo({ query: { search: route.query.search, p: index } });
+
   await useAsyncData('repositories', () => {
     store.fetchRepositories({
       page: index,
