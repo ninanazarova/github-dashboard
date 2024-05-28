@@ -2,7 +2,7 @@
   <header class="header">
     <nuxt-link
       to="/"
-      v-if="$route.path !== '/'"
+      v-if="route.path !== '/'"
       class="header__logo header__logo_link"
       >github-dashboard</nuxt-link
     >
@@ -10,8 +10,8 @@
   </header>
 </template>
 
-<script>
-export default {};
+<script setup>
+const route = useRoute();
 </script>
 
 <style scoped>

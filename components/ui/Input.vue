@@ -5,13 +5,24 @@
     :placeholder="placeholder"
     :name="name"
     :required="required"
-    @input="$emit('input', $event.target.value)"
+    :value="modelValue"
+    @input="updateValue"
   />
 </template>
 
-<script>
-export default {
-  props: ['type', 'placeholder', 'name', 'required', 'input'],
+<script setup>
+import { defineProps, defineEmits } from 'vue';
+const props = defineProps([
+  'type',
+  'placeholder',
+  'name',
+  'required',
+  'modelValue',
+]);
+const emits = defineEmits(['update:modelValue']);
+
+const updateValue = (event) => {
+  emits('update:modelValue', event.target.value);
 };
 </script>
 

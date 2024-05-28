@@ -1,52 +1,53 @@
-import axios from 'axios';
 import yaml from 'yaml';
 
-export const state = () => ({
-  fullName: '',
-  languages: [],
-  colorsOfLanguages: {},
+export const useLanguagesStore = defineStore('languages', {
+  state: () => ({
+    fullName: '',
+    languages: [],
+    colors: {},
+    loading: false,
+    error: null,
+  }),
+  actions: {
+    async fetchLanguages(fullName) {
+      try {
+        this.loading = true;
+        const response = await fetch(
+          `https://api.github.com/repos/${fullName}/languages`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to fetch Languages');
+        }
+        const data = await response.json();
+
+        this.languages = data.length > 5 ? data.slice(0, 5) : data;
+      } catch (error) {
+        this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchColors() {
+      try {
+        this.loading = true;
+        const response = await fetch(
+          'https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml'
+        );
+        if (!response.ok) {
+          throw new Error('Failed to fetch Language Colors');
+        }
+        const data = await response.json();
+        const obj = yaml.parse(data);
+        this.colors = obj;
+      } catch (error) {
+        this.error = error.message;
+      } finally {
+        this.loading = false;
+      }
+    },
+  },
+  getters: {
+    getLanguages: (state) => state.languages,
+    getColors: (state) => state.colors,
+  },
 });
-
-export const mutations = {
-  setState: (state, { languages }) => {
-    languages = Object.keys(languages);
-
-    state.languages = languages.length > 5 ? languages.slice(0, 5) : languages;
-  },
-
-  setColors: (state, { data }) => {
-    const obj = yaml.parse(data);
-    state.colorsOfLanguages = obj;
-  },
-};
-
-export const actions = {
-  fetchLanguages(state, { fullName }) {
-    return axios
-      .get(`https://api.github.com/repos/${fullName}/languages`)
-      .then(res => {
-        return state.commit('setState', { languages: res.data });
-      })
-      .catch(err => console.log(err));
-  },
-
-  fetchcColorsOfLanguages(state) {
-    return axios
-      .get(
-        'https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml'
-      )
-      .then(res => {
-        return state.commit('setColors', { data: res.data });
-      });
-  },
-};
-
-export const getters = {
-  getLanguages(state) {
-    return state.languages;
-  },
-
-  getColors(state) {
-    return state.colorsOfLanguages;
-  },
-};

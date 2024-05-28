@@ -1,4 +1,6 @@
-export default {
+import { defineNuxtConfig } from 'nuxt/config';
+
+export default defineNuxtConfig({
   mode: 'spa',
   /*
    ** Headers of the page
@@ -31,26 +33,11 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [],
-  /*
-   ** Nuxt.js dev-modules
-   */
-  buildModules: [],
-  /*
-   ** Nuxt.js modules
-   */
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/pwa',
-  ],
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
-  axios: {},
-  /*
-   ** Build configuration
-   */
+  modules: ['@pinia/nuxt', 'nuxt-viewport'],
+  pinia: {
+    autoImports: ['defineStore'],
+  },
+
   build: {
     /*
      ** You can extend webpack config here
@@ -62,4 +49,4 @@ export default {
     name: 'fade',
     mode: 'out-in',
   },
-};
+});

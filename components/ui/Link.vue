@@ -27,7 +27,7 @@ export default {
 
 .github-link::before {
   content: '';
-  background-image: url(../../static/icons/github-image.svg);
+  background-image: url(../../public/icons/github-image.svg);
   background-size: cover;
   background-repeat: no-repeat;
   margin-right: 4px;
