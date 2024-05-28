@@ -6,10 +6,10 @@
           class="pagination__link"
           :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
-          <pagination-btn
+          <PaginationBtn
             :disabled="currentPage === 1"
             @click.native="changeCurrentPage(1)"
-            >First</pagination-btn
+            >First</PaginationBtn
           >
         </nuxt-link>
       </li>
@@ -60,10 +60,10 @@
           class="pagination__link"
           :to="{ query: { search: $route.query.search, p: currentPage } }"
         >
-          <pagination-btn
+          <PaginationBtn
             :disabled="currentPage === pagesCount"
             @click.native="changeCurrentPage(pagesCount)"
-            >Last</pagination-btn
+            >Last</PaginationBtn
           >
         </nuxt-link>
       </li>
@@ -71,78 +71,64 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import PaginationBtn from '@/components/ui/PaginationBtn.vue';
-export default {
-  components: {
-    'pagination-btn': PaginationBtn,
-  },
+import { useNuxtApp } from '#app';
+import { useRepositoriesStore } from '~/store';
+import { ref, computed } from 'vue';
+const store = useRepositoriesStore();
+const route = useRoute();
+const router = useRouter();
+const { $viewport } = useNuxtApp();
 
-  data() {
-    return {
-      startIndex: 1,
-      pageRange: 5,
-    };
-  },
+watch($viewport.breakpoint, (newBreakpoint, oldBreakpoint) => {
+  console.log('Breakpoint updated:', oldBreakpoint, '->', newBreakpoint);
+});
 
-  computed: {
-    pages() {
-      const arrToReturn = [];
-      for (let i = this.rangeStart; i <= this.rangeEnd; i++) {
-        arrToReturn.push(i);
-      }
-      return arrToReturn;
-    },
+const startIndex = ref(1);
+const pageRange = ref(5);
 
-    currentPage() {
-      return Number(this.$route.query.p);
-    },
+const pages = computed(() => {
+  const arrToReturn = [];
+  for (let i = rangeStart; i <= rangeEnd; i++) {
+    arrToReturn.push(i);
+  }
+  return arrToReturn;
+});
+const pagesCount = computed(() => 50);
+const currentPage = computed(() => route.query.p);
+const rangeStart = computed(() => {
+  if ($viewport.isLessThan('tablet')) {
+    pageRange.value = 3;
+  }
 
-    rangeStart() {
-      if (window.innerWidth < 768) {
-        this.pageRange = 3;
-      }
-      if (window.innerWidth < 560) {
-        this.pageRange = 1;
-      }
+  if ($viewport.isLessThan('mobileWide')) {
+    pageRange.value = 3;
+  }
 
-      const start = this.currentPage - this.pageRange + 1;
-      return start > 0 ? start : 1;
-    },
+  const start = currentPage.value - pageRange.value + 1;
+  return start > 0 ? start : 1;
+});
+const rangeEnd = computed(() => {
+  const end = pageRange.value + rangeStart.value - 1;
+  return end < pagesCount.value ? end : pagesCount.value;
+});
+const nextPage = computed(() => currentPage.value + 1);
+const prevPage = computed(() => currentPage.value - 1);
 
-    rangeEnd() {
-      const end = this.pageRange + this.rangeStart - 1;
-      return end < this.pagesCount ? end : this.pagesCount;
-    },
-
-    pagesCount() {
-      return 50;
-    },
-
-    nextPage() {
-      return this.currentPage + 1;
-    },
-
-    prevPage() {
-      return this.currentPage - 1;
-    },
-  },
-
-  methods: {
-    changeCurrentPage(index) {
-      this.currentPage = index;
-      console.log(index);
-      this.$router.push({
-        query: { p: index, search: this.$route.query.search },
-      });
-
-      this.$store.dispatch('repositories/fetchRepositories', {
-        page: index,
-        search: this.$route.query.search,
-      });
-    },
-  },
-};
+async function changeCurrentPage(index) {
+  currentPage.value = index;
+  console.log(index);
+  router.push({
+    query: { p: index, search: route.query.search },
+  });
+  await useAsyncData('repositories', () => {
+    store.fetchRepositories({
+      page: index,
+      search: route.query.search,
+    });
+  });
+}
 </script>
 
 <style scoped>

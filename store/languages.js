@@ -18,7 +18,7 @@ export const useLanguagesStore = defineStore('languages', {
         if (!response.ok) {
           throw new Error('Failed to fetch Languages');
         }
-        const data = response.json();
+        const data = await response.json();
 
         this.languages = data.length > 5 ? data.slice(0, 5) : data;
       } catch (error) {
@@ -36,7 +36,7 @@ export const useLanguagesStore = defineStore('languages', {
         if (!response.ok) {
           throw new Error('Failed to fetch Language Colors');
         }
-        const data = response.json();
+        const data = await response.json();
         const obj = yaml.parse(data);
         this.colors = obj;
       } catch (error) {
@@ -47,7 +47,7 @@ export const useLanguagesStore = defineStore('languages', {
     },
   },
   getters: {
-    getLanguages: state => state.languages,
-    getColors: state => state.colors,
+    getLanguages: (state) => state.languages,
+    getColors: (state) => state.colors,
   },
 });

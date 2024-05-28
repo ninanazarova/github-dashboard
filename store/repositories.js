@@ -10,6 +10,22 @@ export const useRepositoriesStore = defineStore('repositories', {
   }),
   actions: {
     async fetchRepositories({ page, search }) {
+      // const baseUrl = 'https://api.github.com/search/repositories?';
+
+      const params = {
+        type: 'Repositories',
+        sort: 'stars',
+        page: page || 1,
+        per_page: 4,
+      };
+
+      const searchParams = new URLSearchParams(params);
+      searchParams.append('q', 'stars:>0');
+      if (search) {
+        searchParams.append('q', search);
+      }
+      console.log(searchParams.toString());
+
       let url = search
         ? `https://api.github.com/search/repositories?q=stars:>0&sort=stars&q=${search}&type=Repositories&page=${page}&per_page=4`
         : `https://api.github.com/search/repositories?q=stars:>0&sort=stars&type=Repositories&page=${page}&per_page=4`;
@@ -20,11 +36,11 @@ export const useRepositoriesStore = defineStore('repositories', {
         if (!response.ok) {
           throw new Error('Failed to fetch Repositories');
         }
-        const data = response.json();
+        const data = await response.json();
 
         //TODO remove 'repositories.items'
         this.repositories = data;
-        this.repositories.items.forEach(repo => {
+        this.repositories.items.forEach((repo) => {
           repo.pushed_at = formatTimeString(repo.pushed_at);
           repo.stargazers_count = formatStarCount(repo.stargazers_count);
         });
@@ -41,7 +57,7 @@ export const useRepositoriesStore = defineStore('repositories', {
         if (!response.ok) {
           throw new Error('Failed to fetch Repository');
         }
-        const data = response.json();
+        const data = await response.json();
         this.repository = data;
 
         this.repository.pushed_at = formatTimeString(this.repository.pushed_at);
@@ -56,7 +72,7 @@ export const useRepositoriesStore = defineStore('repositories', {
     },
   },
   getters: {
-    getRepositories: state => state.repositories,
-    getRepository: state => state.repository,
+    getRepositories: (state) => state.repositories,
+    getRepository: (state) => state.repository,
   },
 });

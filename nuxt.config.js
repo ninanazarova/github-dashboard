@@ -33,10 +33,7 @@ export default defineNuxtConfig({
    ** Plugins to load before mounting the App
    */
   plugins: [],
-  modules: [
-    // Doc: https://axios.nuxtjs.org/usage
-    '@pinia/nuxt',
-  ],
+  modules: ['@pinia/nuxt', 'nuxt-viewport'],
   pinia: {
     autoImports: ['defineStore'],
   },
