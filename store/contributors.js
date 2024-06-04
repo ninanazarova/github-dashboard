@@ -12,7 +12,9 @@ export const useContributorsStore = defineStore('contributors', {
           `https://api.github.com/repos/${fullName}/contributors`
         );
         if (!response.ok) {
-          throw new Error('Failed to fetch Contributors');
+          throw new Error(
+            `Failed to fetch Contributors. Error: ${response.status}`
+          );
         }
         const data = await response.json();
         this.contributors = data.slice(0, 10);
@@ -24,6 +26,6 @@ export const useContributorsStore = defineStore('contributors', {
     },
   },
   getters: {
-    getContributors: state => state.contributors,
+    getContributors: (state) => state.contributors,
   },
 });

@@ -16,11 +16,16 @@ export const useLanguagesStore = defineStore('languages', {
           `https://api.github.com/repos/${fullName}/languages`
         );
         if (!response.ok) {
-          throw new Error('Failed to fetch Languages');
+          throw new Error(
+            `Failed to fetch Languages. Error: ${response.status}`
+          );
         }
         const data = await response.json();
 
-        this.languages = data.length > 5 ? data.slice(0, 5) : data;
+        this.languages =
+          Object.keys(data).length > 5
+            ? Object.fromEntries(Object.entries(data).slice(0, 5))
+            : data;
       } catch (error) {
         this.error = error.message;
       } finally {
@@ -28,17 +33,23 @@ export const useLanguagesStore = defineStore('languages', {
       }
     },
     async fetchColors() {
+      if (Object.keys(this.colors).length !== 0) {
+        return;
+      }
       try {
         this.loading = true;
         const response = await fetch(
           'https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml'
         );
         if (!response.ok) {
-          throw new Error('Failed to fetch Language Colors');
+          throw new Error(
+            `Failed to fetch Language Colors. Error: ${response.status}`
+          );
         }
-        const data = await response.json();
-        const obj = yaml.parse(data);
-        this.colors = obj;
+
+        const data = await response.text();
+
+        this.colors = yaml.parse(data);
       } catch (error) {
         this.error = error.message;
       } finally {
