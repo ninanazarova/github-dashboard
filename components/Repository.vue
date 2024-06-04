@@ -1,6 +1,6 @@
 <template>
   <transition name="fade" mode="out-in" appear>
-    <Panel class="repo-container" @s="changeColor">
+    <Panel class="repo-container">
       <div class="repo-container__column repo-container__column_left">
         <NuxtLink
           :to="`/user-${repositoryUser}/${repositoryName}`"
@@ -42,10 +42,6 @@ const props = defineProps([
   'starsCount',
   'commitDate',
 ]);
-
-function changeColor(event) {
-  console.log(event.bubbles);
-}
 </script>
 
 <style scoped>

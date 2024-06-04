@@ -81,7 +81,7 @@ const route = useRoute();
 const router = useRouter();
 const { $viewport } = useNuxtApp();
 
-const currentPage = computed(() => parseInt(route.query.p) || 1);
+const currentPage = ref(parseInt(route.query.p) || 1);
 const pagesCount = ref(50);
 const pageRange = ref(5);
 
@@ -127,11 +127,9 @@ async function changeCurrentPage(index) {
   currentPage.value = index;
   await navigateTo({ query: { search: route.query.search, p: index } });
 
-  await useAsyncData('repositories', () => {
-    store.fetchRepositories({
-      page: index,
-      search: route.query.search,
-    });
+  store.fetchRepositories({
+    page: index,
+    search: route.query.search,
   });
 }
 </script>
