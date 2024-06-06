@@ -2,9 +2,6 @@ import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
   mode: 'spa',
-  /*
-   ** Headers of the page
-   */
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -16,35 +13,19 @@ export default defineNuxtConfig({
         content: process.env.npm_package_description || '',
       },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: '/fonts/montserrat.css' },
-    ],
   },
-  /*
-   ** Customize the progress-bar color
-   */
   loading: { color: '#fff' },
-  /*
-   ** Global CSS
-   */
-  css: [{ lang: 'css', src: 'assets/style/main.css' }],
-  /*
-   ** Plugins to load before mounting the App
-   */
-  plugins: [],
+  css: [
+    { lang: 'css', src: 'assets/style/main.css' },
+    { lang: 'css', src: 'public/fonts/montserrat.css' },
+  ],
   modules: ['@pinia/nuxt', 'nuxt-viewport'],
   pinia: {
     autoImports: ['defineStore'],
   },
-
   build: {
-    /*
-     ** You can extend webpack config here
-     */
     extend(config, ctx) {},
   },
-
   pageTransition: {
     name: 'fade',
     mode: 'out-in',

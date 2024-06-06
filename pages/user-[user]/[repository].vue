@@ -1,36 +1,47 @@
 <template>
   <main class="repository">
-    <panel class="repository__panel">
-      <h1 class="repository__name">
-        <github-link :elem="'name'" :githubLink="repository.html_url">{{
+    <div v-if="repoLoad">Loading...</div>
+    <Panel class="repository__panel">
+      <template v-if="repoErr">
+        <h1 class="repository__name">{{ route.params.repository }}</h1>
+        <div>{{ repoErr }}</div>
+      </template>
+
+      <h1 v-else class="repository__name">
+        <Link :elem="'name'" :githubLink="repository.html_url">{{
           repository.name
-        }}</github-link>
+        }}</Link>
       </h1>
-      <div class="flex-container">
+
+      <div v-if="!repoLoad && !repoErr" class="flex-container">
         <div class="flex-container_column_left">
           <div class="repository__information">
             <h2 class="title">Description</h2>
 
             <p class="repository__description">{{ repository.description }}</p>
 
-            <commit-date class="repository__commit-date">
+            <CommitDate class="repository__commit-date">
               {{ repository.pushed_at }}
-            </commit-date>
+            </CommitDate>
 
-            <star-counter
+            <StarCounter
               class="repository__star-container"
               :starsCount="repository.stargazers_count"
             />
             <h2 class="title">Top languages</h2>
-            <ul class="repository__lang-list lang-list">
+            <span v-if="Object.keys(languages).length === 0"
+              >There is no data</span
+            >
+            <ul v-else class="repository__lang-list lang-list">
               <li
-                v-for="language in languages"
-                :key="language.id"
+                v-for="(value, key, i) in languages"
+                :key="i"
                 class="lang-list__item"
               >
                 <svg
+                  v-if="key in colors"
                   class="octicon"
-                  :style="`color:${colorsOfLanguages[`${language}`].color}`"
+                  :style="`color:${colors[key].color}`"
                   viewBox="0 0 16 16"
                   version="1.1"
                   width="20"
@@ -39,7 +50,19 @@
                 >
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z" />
                 </svg>
-                {{ language }}
+                <svg
+                  v-else
+                  class="octicon"
+                  :style="`color:black`"
+                  viewBox="0 0 16 16"
+                  version="1.1"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z" />
+                </svg>
+                {{ key }}
               </li>
             </ul>
           </div>
@@ -58,7 +81,7 @@
                 >
                   <img
                     class="repository__contributor-photo"
-                    :src="contributor.avatar_url"
+                    :src="contributor.avatar_url || null"
                     :alt="contributor.login"
                   />
                 </a>
@@ -74,67 +97,49 @@
             :src="repository.owner.avatar_url"
           />
           <p class="repository__owner-name">{{ repository.owner.login }}</p>
-          <github-link :elem="'owner'" :githubLink="repository.owner.html_url"
-            >GitHub</github-link
+          <Link :elem="'owner'" :githubLink="repository.owner.html_url"
+            >GitHub</Link
           >
         </div>
       </div>
-    </panel>
+    </Panel>
   </main>
 </template>
 
-<script>
+<script setup>
 import Panel from '@/components/Panel';
 import Link from '@/components/ui/Link';
 import StarCounter from '@/components/ui/StarCounter';
 import CommitDate from '@/components/ui/CommitDate';
+import {
+  useRepositoriesStore,
+  useContributorsStore,
+  useLanguagesStore,
+} from '~/store';
 
-export default {
-  components: {
-    panel: Panel,
-    'github-link': Link,
-    'star-counter': StarCounter,
-    'commit-date': CommitDate,
-  },
+const route = useRoute();
+const name = computed(() => `${route.params.user}/${route.params.repository}`);
 
-  computed: {
-    repository() {
-      return this.$store.getters['repositories/getRepository'];
-    },
+const repositoriesStore = useRepositoriesStore();
+const contributorsStore = useContributorsStore();
+const languagesStore = useLanguagesStore();
 
-    languages() {
-      return this.$store.getters['languages/getLanguages'];
-    },
+const {
+  repository,
+  loading: repoLoad,
+  error: repoErr,
+} = storeToRefs(repositoriesStore);
+const { contributors } = storeToRefs(contributorsStore);
+const { languages, colors } = storeToRefs(languagesStore);
 
-    colorsOfLanguages() {
-      return this.$store.getters['languages/getColors'];
-    },
-
-    contributors() {
-      return this.$store.getters['contributors/getContributors'];
-    },
-  },
-
-  created() {
-    this.$store.dispatch('languages/fetchLanguages', {
-      fullName: this.repository.full_name,
-    });
-    this.$store.dispatch('contributors/fetchContributors', {
-      fullName: this.repository.full_name,
-    });
-  },
-
-  async fetch({ store, route, error }) {
-    await store
-      .dispatch('repositories/fetchRepository', {
-        fullName: route.path,
-      })
-      .catch(e => {
-        error({ statusCode: 404, message: 'Post not found' });
-      });
-    await store.dispatch('languages/fetchcColorsOfLanguages');
-  },
-};
+await useAsyncData(`repository-${route.params.repository}`, async () => {
+  await Promise.all([
+    repositoriesStore.fetchRepository(name.value),
+    contributorsStore.fetchContributors(name.value),
+    languagesStore.fetchLanguages(name.value),
+    languagesStore.fetchColors(),
+  ]).then(() => true);
+});
 </script>
 
 <style scoped>

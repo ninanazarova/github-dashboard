@@ -20,20 +20,20 @@
         >search</Button
       >
     </form>
-
+    <h2 class="index__title" v-if="store.getLoading">Loading...</h2>
     <h2
       class="index__title"
-      v-if="route.query.search && store.getRepositories.total_count !== 0"
+      v-else-if="route.query.search && store.getRepositories.total_count !== 0"
     >
       Search results by {{ route.query.search }}
     </h2>
     <h2
       class="index__title"
-      v-if="route.query.search && store.getRepositories.total_count == 0"
+      v-else-if="route.query.search && store.getRepositories.total_count == 0"
     >
       Search results by {{ route.query.search }} not found
     </h2>
-    <h2 class="index__title" v-if="!route.query.search">
+    <h2 class="index__title" v-else-if="!route.query.search">
       Most popular repositories
     </h2>
 
@@ -44,8 +44,8 @@
         class="repository-list__item"
       >
         <Repository
-          :repositoryTitle="repository.owner.login + ' / ' + repository.name"
-          :repositoryFullName="repository.full_name"
+          :repositoryUser="repository.owner.login"
+          :repositoryName="repository.name"
           :githubLink="repository.html_url"
           :starsCount="repository.stargazers_count"
           :commitDate="repository.pushed_at"
@@ -62,33 +62,41 @@ import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import Repository from '@/components/Repository';
 import Pagination from '@/components/Pagination';
-import { useRepositoriesStore } from '~/store';
+import { useLanguagesStore, useRepositoriesStore } from '~/store';
 import { ref } from 'vue';
 
 const store = useRepositoriesStore();
-const router = useRouter();
+const languagesStore = useLanguagesStore();
 const route = useRoute();
 const search = ref(route.query.search || '');
 
-await useAsyncData('repositories', () => {
+await useAsyncData('repositories', async () => {
   const page = parseInt(route.query.p) || 1;
-  store.fetchRepositories({
+  await store.fetchRepositories({
     page,
     search: search.value,
   });
+  await languagesStore.fetchColors();
+  return true;
 });
 
-function clearSearch() {
+async function clearSearch() {
   if (search.value) {
     search.value = '';
-    router.push({ query: { p: 1 } });
-    store.fetchRepositories({ page: route.query.p });
+
+    await navigateTo({ query: { p: 1 } });
+
+    await store.fetchRepositories({ page: route.query.p });
   }
 }
 
-function searchRepositories() {
-  router.push({ query: { p: 1, search: search.value } });
-  store.fetchRepositories({ page: route.query.p, search: search.value });
+async function searchRepositories() {
+  await navigateTo({ query: { search: search.value, p: 1 } });
+
+  await store.fetchRepositories({
+    page: route.query.p,
+    search: search.value,
+  });
 }
 </script>
 

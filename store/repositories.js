@@ -4,7 +4,6 @@ export const useRepositoriesStore = defineStore('repositories', {
   state: () => ({
     repositories: [],
     repository: {},
-    query: '',
     loading: false,
     error: null,
   }),
@@ -27,7 +26,9 @@ export const useRepositoriesStore = defineStore('repositories', {
         this.loading = true;
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Failed to fetch Repositories');
+          throw new Error(
+            `Failed to fetch Repositories. Error: ${response.status}`
+          );
         }
         const data = await response.json();
 
@@ -46,9 +47,13 @@ export const useRepositoriesStore = defineStore('repositories', {
     async fetchRepository(fullName) {
       try {
         this.loading = true;
-        const response = await fetch(`https://api.github.com/repos${fullName}`);
+        const response = await fetch(
+          `https://api.github.com/repos/${fullName}`
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch Repository');
+          throw new Error(
+            `Failed to fetch Repository. Error: ${response.status}`
+          );
         }
         const data = await response.json();
         this.repository = data;
@@ -67,5 +72,6 @@ export const useRepositoriesStore = defineStore('repositories', {
   getters: {
     getRepositories: (state) => state.repositories,
     getRepository: (state) => state.repository,
+    getLoading: (state) => state.loading,
   },
 });
