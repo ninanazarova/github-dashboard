@@ -1,26 +1,33 @@
 # github-dashboard
 
-_v 1.0.0_
+_v 2.0.0_
 
-pet project для изучения Nuxt.js с поиском и просмотром самых популярных репозиториев гитхаба
+This app allows users to explore GitHub repositories. It was originally created as a pet project to learn Nuxt and, out of curiosity, was recently migrated to Nuxt 3.
 
-Работа с директивами vue, настройка роутинга с query-параметрами, Vuex
+[Live demo](https://github-dashboard-zeta.vercel.app/)
 
-[Heroku app](https://ghub-dashboard.herokuapp.com/)
+### Features
+- List of GitHub repositories with brief information
+- Detailed pages for each repository
+- Pagination for easy navigation
+- Search functionality
+- Query parameters to enhance user experience
+- Responsive layout
 
-## Build Setup
+### Tech Stack
+- Nuxt 3
+- Vue 3
+- Pinia
+- Vite
+- GitHub API
 
+### Installation
 ```bash
 # install dependencies
 $ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
 
 # build for production and launch server
 $ npm run build
 $ npm run start
 
-# generate static project
-$ npm run generate
 ```
