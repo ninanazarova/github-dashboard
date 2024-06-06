@@ -1,12 +1,19 @@
 <template>
   <main class="repository">
+    <div v-if="repoLoad">Loading...</div>
     <Panel class="repository__panel">
-      <h1 class="repository__name">
+      <template v-if="repoErr">
+        <h1 class="repository__name">{{ route.params.repository }}</h1>
+        <div>{{ repoErr }}</div>
+      </template>
+
+      <h1 v-else class="repository__name">
         <Link :elem="'name'" :githubLink="repository.html_url">{{
           repository.name
         }}</Link>
       </h1>
-      <div class="flex-container">
+
+      <div v-if="!repoLoad && !repoErr" class="flex-container">
         <div class="flex-container_column_left">
           <div class="repository__information">
             <h2 class="title">Description</h2>
@@ -22,15 +29,19 @@
               :starsCount="repository.stargazers_count"
             />
             <h2 class="title">Top languages</h2>
-            <ul class="repository__lang-list lang-list">
+            <span v-if="Object.keys(languages).length === 0"
+              >There is no data</span
+            >
+            <ul v-else class="repository__lang-list lang-list">
               <li
-                v-for="language in languages"
-                :key="language.id"
+                v-for="(value, key, i) in languages"
+                :key="i"
                 class="lang-list__item"
               >
                 <svg
+                  v-if="key in colors"
                   class="octicon"
-                  :style="`color:${colors[`${language}`].color}`"
+                  :style="`color:${colors[key].color}`"
                   viewBox="0 0 16 16"
                   version="1.1"
                   width="20"
@@ -39,7 +50,19 @@
                 >
                   <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z" />
                 </svg>
-                {{ language }}
+                <svg
+                  v-else
+                  class="octicon"
+                  :style="`color:black`"
+                  viewBox="0 0 16 16"
+                  version="1.1"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8z" />
+                </svg>
+                {{ key }}
               </li>
             </ul>
           </div>
@@ -58,7 +81,7 @@
                 >
                   <img
                     class="repository__contributor-photo"
-                    :src="contributor.avatar_url"
+                    :src="contributor.avatar_url || null"
                     :alt="contributor.login"
                   />
                 </a>
@@ -69,14 +92,14 @@
 
         <div class="flex-container_column_right repository__owner">
           <h2 class="title">Owner</h2>
-          <!-- <img
+          <img
             class="repository__owner-photo"
             :src="repository.owner.avatar_url"
           />
           <p class="repository__owner-name">{{ repository.owner.login }}</p>
           <Link :elem="'owner'" :githubLink="repository.owner.html_url"
             >GitHub</Link
-          > -->
+          >
         </div>
       </div>
     </Panel>
@@ -95,25 +118,28 @@ import {
 } from '~/store';
 
 const route = useRoute();
+const name = computed(() => `${route.params.user}/${route.params.repository}`);
 
 const repositoriesStore = useRepositoriesStore();
 const contributorsStore = useContributorsStore();
 const languagesStore = useLanguagesStore();
 
-onMounted(async () => {
-  const name = `${route.params.user}/${route.params.repository}`;
-  await Promise.all([
-    repositoriesStore.fetchRepository(name),
-    contributorsStore.fetchContributors(name),
-    languagesStore.fetchLanguages(name),
-    languagesStore.fetchColors(),
-  ]);
-});
+const {
+  repository,
+  loading: repoLoad,
+  error: repoErr,
+} = storeToRefs(repositoriesStore);
+const { contributors } = storeToRefs(contributorsStore);
+const { languages, colors } = storeToRefs(languagesStore);
 
-const repository = computed(() => repositoriesStore.getRepository);
-const languages = computed(() => languagesStore.getLanguages);
-const contributors = computed(() => contributorsStore.getContributors);
-const colors = computed(() => languagesStore.getColors);
+await useAsyncData(`repository-${route.params.repository}`, async () => {
+  await Promise.all([
+    repositoriesStore.fetchRepository(name.value),
+    contributorsStore.fetchContributors(name.value),
+    languagesStore.fetchLanguages(name.value),
+    languagesStore.fetchColors(),
+  ]).then(() => true);
+});
 </script>
 
 <style scoped>
